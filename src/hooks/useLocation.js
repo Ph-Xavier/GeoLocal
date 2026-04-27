@@ -1,5 +1,5 @@
-import * as Location from "expo-location"; // Modo de localização do Expo
-import { useEffect, useState } from "react"; // O Hook de efeitos colaterais, estado e ciclo de vida do React
+import * as Location from "expo-location"; // Módulo de localizaçõ do Expo
+import { useEffect, useState } from "react"; // Os Hooks de Efeitos Colaterais e Estado/Ciclo de Vida do React
 
 export default function useLocation() {
   const [coords, setCoords] = useState(null);
@@ -8,18 +8,24 @@ export default function useLocation() {
   useEffect(() => {
     // Efeito colateral para obter a localização
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync(); // Solicita permissão para acessar a localização
-      if (status !== "granted") {
-        setErrorMsg("Permissão negada para acessar a localização");
-        return;
-      }
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync(); // Solicita permissão para acessar a localização
+        if (status !== "granted") {
+          setErrorMsg("Permissão negada para acessar a localização");
+          return;
+        }
 
-      let location = await Location.getCurrentPositionAsync({}); // Obtém a localização atual
-      setCoords({
-        latitude: location.coords.latitude, // Define as coordenadas de latitude e longitude
-        longitude: location.coords.longitude,
-      }); // Atualiza o estado com as coordenadas obtidas
+        let location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.High, // Define a acurácia como alta
+        });
+        setCoords({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+      } catch (error) {
+        setErrorMsg("Erro ao obter a localização");
+      }
     })(); // Função auto-invoca para obter a localização
-  }, []); // O array vazio significa que o efeito só será executado uma vez, quando o componente for montado
+  }, []); // O array vazio [] significa que o efeito só será executado um vez (semelhante ao componentDidMount)
   return { coords, errorMsg };
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import Main from "./src/pages/main";
+import Main from "./src/pages/Main.js";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 

@@ -4,7 +4,8 @@ import MapView, { Marker } from "react-native-maps";
 import useLocation from "../hooks/useLocation";
 
 export default function Main() {
-  const { coords, errorMsg } = useLocation(); //Hook personalizado para obter a localização
+  const { coords, errorMsg } = useLocation(); //hook personalizado para obter a localização
+
   if (errorMsg) {
     return (
       <View style={styles.center}>
@@ -12,16 +13,15 @@ export default function Main() {
       </View>
     );
   }
-
+  console.log(coords);
   if (!coords) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Carregando localização.....</Text>
+        <ActivityIndicator size="large" color="#4734dbff" />
+        <Text>Carregando localização...</Text>
       </View>
     );
   }
-
   return (
     <MapView
       style={styles.map}
@@ -33,14 +33,7 @@ export default function Main() {
       }}
       showsUserLocation={true}
     >
-      <Marker
-        coordinate={{
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        }}
-        title="Minha Localização"
-        description="Esta é a minha localização atual"
-      />
+      <Marker coordinate={coords} />
     </MapView>
   );
 }
